@@ -3,6 +3,7 @@ import './App.css';
 import TweetBox from './TweetBox';
 import Feed from './Feed';
 
+
 class App extends Component {
   constructor(props){
     super(props);
@@ -21,24 +22,25 @@ class App extends Component {
 
   componentDidMount() {
 
-    fetch('https://still-garden-88285.herokuapp.com/draft_tweets', '/user_name?ID=1')
-      .then(res => res.json())
+    axios.get('https://still-garden-88285.herokuapp.com/draft_tweets')
       .then(
-        result => {
+        (result) => {
           this.setState({
-            user: result
-      });
-      },
-      error => {
-      this.setState({
-        error: error
-      });
-      }
-    );
+            isLoaded: true,
+            tweets: result.data.draft_tweets
+          })
+        },
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error: error
+          })
+        }
+      )
 
     console.log(this.state.user);
           debugger;
-
+/*
     fetch("https://still-garden-88285.herokuapp.com/draft_tweets")
       .then(res => res.json())
       .then(
@@ -54,7 +56,7 @@ class App extends Component {
             error: error
           })
         }
-      )
+      )*/
   }
 
   post(newText) {
@@ -87,10 +89,6 @@ class App extends Component {
           });
         }
       )
-  }
-
-
-
   }
 
   handleSubmit(newText) {
