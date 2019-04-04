@@ -66,8 +66,10 @@ class App extends Component {
         avatar: 'https://img.ifcdn.com/images/d3951bf44788590b80f69c0c65718f7a23eb33c645cb677ee335f81a6e785ee6_3.jpg',
         description: newText
       },
+      body: JSON.stringify(newTweet)
+    }
 
-      fetch(url, options)
+    fetch(url, options)
       .then(res => res.json())
       .then(
         (result) => {
