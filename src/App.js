@@ -9,13 +9,36 @@ class App extends Component {
     this.state = {
       tweets: [],
       error: null,
-      isLoaded: true
+      isLoaded: true,
+      id: '1',
+      user:''
     }
 
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+
+
   componentDidMount() {
+
+    fetch('https://still-garden-88285.herokuapp.com/draft_tweets', '/user_name?ID=1')
+      .then(res => res.json())
+      .then(
+        result => {
+          this.setState({
+            user: result
+      });
+      },
+      error => {
+      this.setState({
+        error: error
+      });
+      }
+    );
+
+    console.log(this.state.user);
+          debugger;
+
     fetch("https://still-garden-88285.herokuapp.com/draft_tweets")
       .then(res => res.json())
       .then(
@@ -32,6 +55,40 @@ class App extends Component {
           })
         }
       )
+  }
+
+  post(newText) {
+    const options = {
+      method: 'post',
+      url: 'https://img.ifcdn.com/images/d3951bf44788590b80f69c0c65718f7a23eb33c645cb677ee335f81a6e785ee6_3.jpg',
+      data: {
+        user_name: 'Yvone',
+        avatar: 'https://img.ifcdn.com/images/d3951bf44788590b80f69c0c65718f7a23eb33c645cb677ee335f81a6e785ee6_3.jpg',
+        description: newText
+      },
+
+      fetch(url, options)
+      .then(res => res.json())
+      .then(
+        (result) => {
+          let newTweets = this.state.tweets.slice();
+
+          this.setState({
+            isLoaded: true,
+            tweets: newTweets.concat(result.draft_tweet)
+          });
+        },
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      )
+  }
+
+
+
   }
 
   handleSubmit(newText) {
@@ -51,6 +108,9 @@ class App extends Component {
     // this.setState({ tweets: tweets.concat(newTweet) });
 
     // Dynamic UI !
+
+    
+
     let newTweet = {
       user_name: 'Yvone',
       avatar: 'https://img.ifcdn.com/images/d3951bf44788590b80f69c0c65718f7a23eb33c645cb677ee335f81a6e785ee6_3.jpg',
@@ -99,6 +159,9 @@ class App extends Component {
           <Fragment>
             <TweetBox
               onSubmitNewTweet={this.handleSubmit}
+            />
+            <TweetBox
+              onSubmitNewTweet={this.post}
             />
             <Feed 
               tweets={tweets}
